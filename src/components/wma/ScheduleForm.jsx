@@ -3,6 +3,7 @@ import { TextField, Button, Select, MenuItem, InputLabel, FormControl, Box, Typo
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import axios from 'axios';
 import dayjs from 'dayjs';
 
 const ScheduleForm = () => {
@@ -35,41 +36,36 @@ const ScheduleForm = () => {
     e.preventDefault();
   
     // Format the dateOfSchedule for the API request
-    const formattedDate = formData.dateOfSchedule ? formData.dateOfSchedule.toISOString() : null;
+    const formattedDate = dayjs(formData.dateOfSchedule).isValid() 
+    ? dayjs(formData.dateOfSchedule).format('YYYY-MM-DDTHH:mm:ss') 
+    : null;
+  
+  if (!formattedDate) {
+    console.error('Invalid date format');
+    return;
+  }
+  
   
     try {
-      const response = await fetch('http://localhost:8080/api/schedules', { // Updated endpoint
-        method: 'POST',
+      const response = await axios.post('http://localhost:8080/api/schedules', {
+        timeOfSchedule: formData.timeOfSchedule,
+        dateOfSchedule: formattedDate, // Use the formatted date here
+        noOfTrucksNeeded: formData.noOfTrucksNeeded,
+        nameOfWMA: formData.nameOfWMA,
+        citiesIncluded: formData.citiesIncluded,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          timeOfSchedule: formData.timeOfSchedule,
-          dateOfSchedule: formattedDate, // Use the formatted date here
-          noOfTrucksNeeded: parseInt(formData.noOfTrucksNeeded, 10), // Ensure it's an integer
-          nameOfWMA: formData.nameOfWMA,
-          citiesIncluded: formData.citiesIncluded,
-        }),
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to create schedule');
-      }
-  
-      const data = await response.json();
-      console.log('Schedule created successfully:', data);
+      console.log('Schedule created successfully:', response.data);
       // Optionally reset the form or give feedback to the user
-      setFormData({
-        timeOfSchedule: '',
-        dateOfSchedule: null,
-        noOfTrucksNeeded: '',
-        nameOfWMA: '',
-        citiesIncluded: []
-      });
     } catch (error) {
       console.error('Error:', error);
     }
   };
+  
   
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', mt: 5, backgroundColor: '#e0f2f1', p: 3, borderRadius: 2 }}>

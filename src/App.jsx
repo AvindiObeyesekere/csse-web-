@@ -8,6 +8,7 @@ import Contoller from "./components/collector/Contoller";
 import ScheduleCollection from "./components/wma/ScheduleCollection";
 import ScheduleForm from "./components/wma/ScheduleForm";
 import ScheduleDisplay from "./components/wma/ScheduleDisplay";
+import ScheduleTable from "./components/wma/ScheduleTable";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/schedule" element={<ScheduleCollection/>} />
         <Route path="/sform" element={<ScheduleForm/>} />
         <Route path="/sdisplay" element={<ScheduleDisplay/>} />
+        <Route path="/stable" element={<ScheduleTable/>} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/resident" element={<Resident />} />
         <Route path="/collector/" element={<WasteCollectorProfile />} >
