@@ -5,16 +5,24 @@ import WMA from "./components/wma/WMA";
 import Admin from "./components/admin/Admin";
 import Resident from "./components/resident/Resident";
 import Contoller from "./components/collector/Contoller";
+import ScheduleCollection from "./components/wma/ScheduleCollection";
+import ScheduleForm from "./components/wma/ScheduleForm";
+import ScheduleDisplay from "./components/wma/ScheduleDisplay";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/wma" element={<WMA />} />
+        
+        <Route path="/schedule" element={<ScheduleCollection/>} />
+        <Route path="/sform" element={<ScheduleForm/>} />
+        <Route path="/sdisplay" element={<ScheduleDisplay/>} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/resident" element={<Resident />} />
         <Route path="/collector/" element={<WasteCollectorProfile />} >
-          <Route path="/home" element={<WasteCollectorProfile />} />
+          <Route path="home" element={<WasteCollectorProfile />} />
+
         </Route>
       </Routes>
     </Router>
